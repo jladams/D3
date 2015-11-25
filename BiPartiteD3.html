@@ -948,7 +948,7 @@ var svg = d3.select("body")
 	.append("g").attr("transform","translate("+ margin.l+","+margin.t+")");
 
 var data = [ 
-	{data:bP.partData(refugee_data,2), id:'RefugeeData', header:["Country","State", "FY 2014 Refugees (>= 10 Per Country Per State)"]},
+	{data:bP.partData(refugee_data,2), id:'RefugeeData', header:["Country","State", "FY 2014 Refugees"]},
 ];
 
 bP.draw(data, svg);
