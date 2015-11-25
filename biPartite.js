@@ -1,8 +1,13 @@
 !function(){
 	var bP={};	
-	var b=30, bb=150, height=700, buffMargin=1, minHeight=14;
+	var b=30, bb=150, height=2000, buffMargin=1, minHeight=14;
 	var c1=[-250, 40], c2=[-50, 200], c3=[-10, 300]; //Column positions of labels.
-	var colors =['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928','#8dd3c7','#fffbb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9','#bc80bd','#ccebc5','#ffed6f','#a50026','#d73027','#f46d43','#fdae61','#fee090','#ffbbbb','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'];
+	var colors =['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928','#8dd3c7','#fffbb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9','#bc80bd','#ccebc5','#ffed6f','#a50026','#d73027','#f46d43','#fdae61','#fee090','#ffbbbb','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695','#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928','#8dd3c7','#fffbb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9','#bc80bd','#ccebc5','#ffed6f','#a50026','#d73027','#f46d43','#fdae61','#fee090','#ffbbbb','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695','#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928','#8dd3c7','#fffbb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5','#d9d9d9','#bc80bd','#ccebc5','#ffed6f','#a50026','#d73027','#f46d43','#fdae61','#fee090','#ffbbbb','#e0f3f8','#abd9e9','#74add1','#4575b4','#313695'];
+	var selected = false;        
+
+    $('html').click(function(){
+        selected=false;
+    });            	
 	
 	bP.partData = function(data,p){
 		var sData={};
@@ -226,14 +231,23 @@
 			drawEdges(visData, biP.id);
 			drawHeader(biP.header, biP.id);
 			
-			[0,1].forEach(function(p){			
-				d3.select("#"+biP.id)
-					.select(".part"+p)
-					.select(".mainbars")
-					.selectAll(".mainbar")
-					.on("mouseover",function(d, i){ return bP.selectSegment(data, p, i); })
-					.on("mouseout",function(d, i){ return bP.deSelectSegment(data, p, i); });	
-			});
+			[0,1].forEach(function(p){
+			    if (selected=false) {		
+				    d3.select("#"+biP.id)
+					    .select(".part"+p)
+					    .select(".mainbars")
+					    .selectAll(".mainbar")
+					    .on("mouseover",function(d, i){ return bP.selectSegment(data, p, i); })
+					    .on("click", function(d,i) { selected=true; return bP.selectSegment(data, p, i);})
+					    .on("mouseout",function(d, i) { return bP.deSelectSegment(data, p, i);  });	
+			    } else if (selected=true) {
+			        d3.select("#"+biP.id)
+				        .select(".part"+p)
+					    .select(".mainbars")
+					    .selectAll(".mainbar")
+					    .on("click", function(d,i) { selected=true; return bP.selectSegment(data, p, i);})
+		        };
+		    });
 		});	
 	}
 	
