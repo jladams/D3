@@ -1,6 +1,14 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<style>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>James L. Adams</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../images/party.png" />
+    <link rel="stylesheet" href="../../bootstrap-3.3.5-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../bootstrap-3.3.5-dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../../style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><style>
 body{
 	width:800px;
 	margin:50px auto;
@@ -12,12 +20,13 @@ rect{
 	shape-rendering:crispEdges;
 }
 </style>
+</head>
 <body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="biPartite.js"></script>
-<script>
 
+<script>
 var refugee_data=[
 ['IRAQ','CALIFORNIA',3049],
 ['IRAQ','MICHIGAN',2751],
@@ -954,4 +963,7 @@ var data = [
 bP.draw(data, svg);
 
 </script>
+
+<p>Data from: <a href="http://www.acf.hhs.gov/programs/orr/resource/refugee-arrival-data" target="_blank">US DHHS, Office of Refugee Resettlement</a></p>
+<script src="../../bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
 </body>
