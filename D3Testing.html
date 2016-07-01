@@ -11,57 +11,90 @@
 
 <script>
 
+d3.csv('https://raw.githubusercontent.com/jladams/elections/master/data/csv/statesAll.csv', function(error, data1){
+	d3.csv('https://raw.githubusercontent.com/jladams/elections/master/data/csv/totalAll.csv', function(error, data2){
 
-d3.csv('https://raw.githubusercontent.com/jladams/elections/master/data/csv/statesAll.csv', function(error, data){
-	dataStates = data.map(function(d) {
-		d["year"] = +d["year"];
-		d["votes"] = +d["votes"];
-		d["party"] = d["party"];
-		return d;
-	});
-	console.log(dataStates);
-	
-	var svg = d3.select("svg")
+		var states = true;			
 
-	svg.selectAll("circle")
-		.data(dataStates, function(d) { return d; })
-		.enter().append("circle")
-		.attr("cy", function(d,i) { return Math.sqrt(d.votes * .05); })
-		.attr("cx", function(d) { return (d.year - 1998) * 100; })
-		.attr("r", function(d) { return Math.sqrt(d.votes * .0005); })
-		.attr("fill", function(d) { 
-			if (d.party == "dem") {
-				return "blue";
-			} else if (d.party == "rep") {
-				return "red";
+		dataStates = data1.map(function(d) {
+			d["year"] = +d["year"];
+			d["votes"] = +d["votes"];
+			d["party"] = d["party"];
+			return d;
+		});
+
+		dataNational = data2.map(function(d) {
+			d["year"] = +d["year"];
+			d["votes"] = +d["votes"];
+			d["party"] = d["party"];
+			return d;
+		});
+
+		var svg = d3.select("svg")		
+		function update(data) {
+			var circles = svg.selectAll("circle")
+				.data(data, function(d) { return d; });
+			
+			circles.enter().append("circle")
+				.style("opacity", "0")
+				.transition()
+					.attr("cy", 500)
+					.attr("cx", function(d) { return (d.year - 1998) * 100; })
+					.attr("r", function(d) { 
+						if (states==true){
+							return Math.sqrt(d.votes * .0005);
+						} else {
+							return Math.sqrt(d.votes * .00005);
+						};
+					})
+					.attr("fill", function(d) { 
+						if (d.party == "dem") {
+							return "blue";
+						} else if (d.party == "rep") {
+							return "red";
+						} else {
+							return "yellow";
+						}
+					})
+				.transition()
+				.delay(1000)
+				.duration(500)
+					.style("opacity", ".25")
+				.transition()
+				.duration(500)
+					.attr("cy", function(d, i) {		
+						if(states == true) {
+							return Math.sqrt(d.votes * .005);
+						} else {
+							return Math.sqrt(d.votes * .05);
+						}
+				});
+
+			circles.exit()
+				.transition()
+				.duration(1000)
+					.attr("cy", 500)
+				.transition()
+				.duration(500)
+					.style("opacity", "0")
+				.remove();
+				
+		};
+
+		d3.select("svg").on("click", function() {			
+			if (states == true) {
+				update(dataNational);
+				states = false;
 			} else {
-				return "yellow";
-			}
-		})			
-		.style("opacity", ".25")
-		.on("mouseover", function(d){
-			d3.select(this)
-				.style("opacity",".75");
-		})
-		.on("mouseout", function(d){
-			d3.select(this)
-				.style("opacity", ".25");
-		})
-		.on("click", function(d){
-			if(d3.select(this).attr("cy") != 800) {
-				d3.select(this)
-					.transition()
-					.duration(2000)
-					.attr("cy", 800);
-				console.log(d.state);
-			} else {
-				d3.select(this)
-					.transition()
-					.duration(2000)
-					.attr("cy", function(d,i) { return Math.sqrt(d.votes * .05); });
-			}
-		}); 
+				update(dataStates);
+				states = true;
+			};
+		});
+		
+		update(dataStates);
+		
 
+	});	
 });
 
 
