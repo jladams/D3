@@ -14,17 +14,17 @@
 d3.csv('https://raw.githubusercontent.com/jladams/elections/master/data/csv/statesAll.csv', function(error, data1){
 	d3.csv('https://raw.githubusercontent.com/jladams/elections/master/data/csv/totalAll.csv', function(error, data2){
 
-		var states = true;			
+		var states = false;			
 
 		dataStates = data1.map(function(d) {
-			d["year"] = +d["year"];
+			d["year"] = d["year"];
 			d["votes"] = +d["votes"];
 			d["party"] = d["party"];
 			return d;
 		});
 
 		dataNational = data2.map(function(d) {
-			d["year"] = +d["year"];
+			d["year"] = d["year"];
 			d["votes"] = +d["votes"];
 			d["party"] = d["party"];
 			return d;
@@ -32,21 +32,21 @@ d3.csv('https://raw.githubusercontent.com/jladams/elections/master/data/csv/stat
 
 		var svg = d3.select("svg")		
 		function update(data) {
+				
 			var circles = svg.selectAll("circle")
 				.data(data, function(d) { return d; });
 			
 			circles.enter().append("circle")
 				.style("opacity", "0")
+				.attr("r", function(d) { return Math.sqrt(d.votes * .0005); })
+				.attr("cx", function(d) { return ((d.year - 1999) * 6) + 5 + "%"; })
 				.transition()
-					.attr("cy", 500)
-					.attr("cx", function(d) { return (d.year - 1998) * 100; })
-					.attr("r", function(d) { 
-						if (states==true){
-							return Math.sqrt(d.votes * .0005);
-						} else {
-							return Math.sqrt(d.votes * .00005);
-						};
-					})
+				.duration(1000)
+					.attr("cy", "50%")
+				.transition()
+				.delay(1000)
+				.duration(750)
+					.style("opacity", ".25")
 					.attr("fill", function(d) { 
 						if (d.party == "dem") {
 							return "blue";
@@ -57,25 +57,21 @@ d3.csv('https://raw.githubusercontent.com/jladams/elections/master/data/csv/stat
 						}
 					})
 				.transition()
-				.delay(1000)
-				.duration(500)
-					.style("opacity", ".25")
-				.transition()
-				.duration(500)
-					.attr("cy", function(d, i) {		
-						if(states == true) {
-							return Math.sqrt(d.votes * .005);
+				.duration(1000)
+					.attr("cy", function(d) {
+						if (typeof d.state !== "undefined") {	
+							return Math.sqrt(d.votes * 5)/100 + "%";
 						} else {
-							return Math.sqrt(d.votes * .05);
+							return Math.sqrt(d.votes * .7)/100 + "%";
 						}
-				});
-
+					});
+					
 			circles.exit()
 				.transition()
 				.duration(1000)
-					.attr("cy", 500)
+					.attr("cy", "50%")
 				.transition()
-				.duration(500)
+				.duration(1500)
 					.style("opacity", "0")
 				.remove();
 				
@@ -91,7 +87,7 @@ d3.csv('https://raw.githubusercontent.com/jladams/elections/master/data/csv/stat
 			};
 		});
 		
-		update(dataStates);
+		update(dataNational);
 		
 
 	});	
